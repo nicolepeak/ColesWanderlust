@@ -1,7 +1,9 @@
 package com.example.The_Coding_Sharks_demo.services;
 import com.example.The_Coding_Sharks_demo.models.Destination;
+import com.example.The_Coding_Sharks_demo.models.PackListItem;
 import com.example.The_Coding_Sharks_demo.models.Trip;
 import com.example.The_Coding_Sharks_demo.models.User;
+import com.example.The_Coding_Sharks_demo.models.data.PacklistRepository;
 import com.example.The_Coding_Sharks_demo.models.data.TripRepository;
 import com.example.The_Coding_Sharks_demo.models.data.UserRepository;
 import jakarta.servlet.http.HttpSession;
@@ -22,6 +24,9 @@ public class TripService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PacklistRepository packlistRepository;
 
     @Autowired
     private UserService userService;
@@ -115,6 +120,37 @@ public class TripService {
         }   
 
     }
+
+    // Adds a new item to the packlist within a specific trip
+    public PackListItem addPackListItem(int tripId, String itemName) {
+        Trip trip = tripRepository.findById(tripId)
+                .orElseThrow(() -> new IllegalArgumentException("Trip not found"));
+
+        PackListItem newItem = new PackListItem();
+        newItem.setItemName(itemName);
+        newItem.setTrip(trip);
+
+        // Save the packlist item and associate it with the trip
+        trip.getPackList().add(newItem);
+        packlistRepository.save(newItem);
+        tripRepository.save(trip); // Save trip with updated packlist
+        return newItem;
+    }
+
+    // Removes an item from the packlist within a specific trip
+    public boolean removePackListItem(int tripId, int packlistItemId) {
+        Trip trip = tripRepository.findById(tripId)
+                .orElseThrow(() -> new IllegalArgumentException("Trip not found"));
+
+        PackListItem itemToRemove = packlistRepository.findByIdAndTripId(packlistItemId, tripId)
+                .orElseThrow(() -> new IllegalArgumentException("Packlist item not found for this trip"));
+
+        trip.getPackList().remove(itemToRemove);
+        packlistRepository.delete(itemToRemove); // Remove item from the repository
+        tripRepository.save(trip); // Save trip with updated packlist
+        return true;
+    }
+
 
 }
 

@@ -23,6 +23,10 @@ public class Trip extends AbstractEntity {
     )
     private List<Destination> destinationList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL)
+    private List<PackListItem> packList;
+
+    //constructors
     public Trip(){};
 
     public Trip(User primaryUser, List<User> secondaryUsers, List<Destination> destinationList) {
@@ -55,8 +59,12 @@ public class Trip extends AbstractEntity {
     public void setDestinations(List<Destination> destinationList) {
         this.destinationList = destinationList;
     }
-    
 
+    public List<PackListItem> getPackList() {
+        return packList;
+    }
 
-     
+    public void setPackList(List<PackListItem> packList) {
+        this.packList = packList;
+    }
 }

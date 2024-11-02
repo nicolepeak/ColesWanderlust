@@ -23,6 +23,8 @@ public class PackListItem extends AbstractEntity {
     private Trip trip;
 
     //constructors
+    public PackListItem(){};
+
     public PackListItem(String itemName, int quantity, boolean packed, Trip trip) {
         this.itemName = itemName;
         this.quantity = quantity;
