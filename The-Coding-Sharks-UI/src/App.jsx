@@ -61,7 +61,7 @@ function App() {
             {/* Private Routes */}
             {authenticated ? (
               <>
-                <Route path="/randomDestination" element={<RandomDestination />} />
+                <Route path="/randomDestination/:tripId" element={<RandomDestination />} />
                 <Route path="/userHomePage" element={<UserHomePage />} />
                 <Route path="/trip/:tripId" element={<Trip />} />
                 <Route path="/tripSummary" element={<TripSummary />} />

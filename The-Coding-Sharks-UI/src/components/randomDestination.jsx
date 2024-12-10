@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
 import LeafletMap from "./leafletMap";
+import { useParams } from "react-router-dom";
 
-const RandomDestination = ({ tripId }) => {
+
+const RandomDestination = () => {
+  const { tripId } = useParams(); // Extract tripId from the URL
   const [selectedCity, setSelectedCity] = useState(null);
+  const [successMessage, setSuccessMessage] = useState("");
 
   const cities = [
     "New York City", "Los Angeles", "Chicago", "Houston", "Phoenix",
@@ -48,11 +52,14 @@ const RandomDestination = ({ tripId }) => {
           params: {
             selectedCity: city.name,
           },
+          withCredentials: true,
         }
       );
       console.log("City added to trip:", response.data);
+      setSuccessMessage(`The city ${city.name} has been successfully added to your trip!`);  // Set success message
     } catch (error) {
       console.error("Error adding city to trip:", error);
+      setSuccessMessage("");  // Clear message in case of error
     }
   };
 
@@ -76,9 +83,11 @@ const RandomDestination = ({ tripId }) => {
     <div>
       <h2>You're going to {selectedCity ? selectedCity.name : "..."}</h2>
       <button onClick={handleClick}>Pick a Random US Destination!</button>
+
       {tripId && selectedCity && (
         <button onClick={handleAddToTripClick}>Add to Trip</button>
       )}
+      {successMessage && <div style={{ color: "green", marginTop: "10px" }}>{successMessage}</div>}
       {selectedCity && <LeafletMap selectedCity={selectedCity} />}
     </div>
   );

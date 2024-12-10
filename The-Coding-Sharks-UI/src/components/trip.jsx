@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import LeafletMap from "./leafletMap";
 import { useParams } from "react-router-dom";
+import { Link } from 'react-router-dom';
+
 
 const Trip = () => {
   const { tripId } = useParams();
+  console.log("Trip ID: ", tripId);
   const [destinations, setDestinations] = useState([]);
   const [destinationName, setDestinationName] = useState("");
   const [editingDestinationId, setEditingDestinationId] = useState(null);
@@ -161,6 +164,10 @@ const Trip = () => {
         ))}
       </ul>
       <LeafletMap destinations={destinations} />
+
+      <Link to={`/randomDestination/${tripId}`}> 
+        <button>Go to Random Destination</button>
+      </Link>
     </div>
   );
 };
